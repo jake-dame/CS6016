@@ -135,7 +135,6 @@ CREATE TABLE Titles
     Title string,
     Author string,
     PRIMARY KEY (ISBN),
-    UNIQUE (Title, Author),
     FOREIGN KEY (ISBN) REFERENCES Inventory (ISBN)
 )
 ```
@@ -143,8 +142,6 @@ CREATE TABLE Titles
 `ISBN` is unique because this table does not track quantity of physical copies.
 `Title` is not unique because, while rare, books by two different authors may have the same title.
 `Author` is not unique because the library may have multiple books by the same author.
-
-We can enforce uniqueness with `(Title, Author)` and because no one author writes two different books with the same title, and it is lacking the constraint from the `ISBN` attribute.
 
 ## PART 3
 
@@ -251,16 +248,6 @@ If it is a key, then none of its subsets are a superkey.
 
 ### "If an entire schema consists of the set {x, y, z}, and if none of the proper subsets of {x, y, z} are keys, then {x, y, z} must be a key."
 
-False.
+True.
 
-Even if the entire schema is the only potential key, we know nothing about the uniqueness of {x}, {y}, or {z}.
-
-If all of them allow duplicates, this would be false. If one of them, however, was unique, it would be true.
-
-Potential instance:
-
-| x | y | z |
-|---|---|---|
-|1  |a  |8  |
-|1  |b  |9  |
-|1  |b  |9  |
+As long as no duplicate rows are allowed (because it is a schema, and schemae by definition can't have duplicate rows), then the full set itself is the minimal level for uniqueness.
