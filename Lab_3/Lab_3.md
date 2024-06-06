@@ -92,17 +92,22 @@ Games
 ___
 
 **1. "Find the names of any player with an Elo rating of 2850 or higher."**
-- $\pi_{Name}(\sigma_{Elo >= 2850}(Players))$
+
+$\pi_{Name}(\sigma_{Elo >= 2850}(Players))$
 
 **2. "Find the names of any player who has ever played a game as white."**
-- $\pi_{Name}(Games \bowtie_{Games.wpID = Players.pID} Players)$
+
+$\pi_{Name}(Games \bowtie_{Games.wpID = Players.pID} Players)$
 
 **3. "Find the names of any player who has ever won a game as white."**
-- $\pi_{Name}((\sigma_{Result = 1-0}(Games) \bowtie_{Games.wpID = Players.pID} Players))$
+
+$\pi_{Name}((\sigma_{Result = 1-0}(Games) \bowtie_{Games.wpID = Players.pID} Players))$
 
 **4. "Find the names of any player who played any games in 2018."**
-- $Players2018 = (\sigma_{Year = 2018}(Events) \bowtie Games)$
-- $\pi_{Name}( Players2018 \bowtie_{Games.wpID=Players.pID \lor Games.bpID=Players.pID})$
+
+$\rho(P18, (\sigma_{Year = 2018} Events) \bowtie Games))$
+
+$\pi_{Name}( P18 \bowtie_{wpID=P18.pID \lor bpID=P18.pID})$
 
 **5. "Find the names and dates of any event in which Magnus Carlsen lost a game."**
 - Find Magnus Carlsen's pID (1)
@@ -111,7 +116,6 @@ ___
 **6. "Find the names of all opponents of Magnus Carlsen."**
 - Find Magnus Carlsen's pID (1)
 - Find all games where wpID or bpID is 1
-- 
 
 # Part 3: LMS Queries
 
@@ -142,17 +146,17 @@ Courses
 | 3810 | Architecture |
 | 5530 | Databases    |
 
-"\[Provide English descriptions of the query and the resulting relation based on the tables above.\]"
+**"\[Provide English descriptions of the query and the resulting relation based on the tables above.\]"**
 
 ___
 
 **3.1**
 
-"$\rho(C, \pi_{sID}(\sigma_{Grd = C}(Enrolled)))$"
+$\rho(C, \pi_{sID}(\sigma_{Grd = C}(Enrolled)))$
 - Select students from  Enrolled whose Grade was C; project their sID; put those students into a new table named "C"
 - "Create a new table called "C" with the IDs of enrolled students who got a C."
 
-"$\pi_{Name}((\pi_{sID}(Enrolled) - C) \bowtie Students)$"
+$\pi_{Name}((\pi_{sID}(Enrolled) - C) \bowtie Students)$
 - Get the sIDs of students in Enrolled; out of those, find the ones who are not in the "C" table; match the resulting students to the ones in Students; project the names of the resulting students
 - "Get the names of enrolled students who never got a C."
 
@@ -187,7 +191,7 @@ ___
 
 **3.3**
 
-"$\pi_{Name}(( \pi_{cID,sID}(Enrolled) / \pi_{sID}(Students) ) \bowtie Courses)$"
+$\pi_{Name}(( \pi_{cID,sID}(Enrolled) / \pi_{sID}(Students) ) \bowtie Courses)$
 - Get the course and student IDs from Enrolled, and divide out by all students; match the resulting course ID values with the course IDs in Courses; project the names of the resulting courses
 
 **Result:**
@@ -199,13 +203,16 @@ ___
 
 **3.4**
 
-"Provide a relational algebra query that uses the divide operator to find the names of all students who are taking all of the 3xxx-level classes."
+**"Provide a relational algebra query that uses the divide operator to find the names of all students who are taking all of the 3xxx-level classes."**
 
-Get the classes we are interested in
-- $C = \pi_{cID >= 3000 \land cID< 4000} (Courses)$
+Get the classes we are interested in:
 
-Find tuples in Courses.cID that have all values of C.cID
-- $S = \pi_{sID}(Courses/C)$
+$\rho(C, \pi_{cID >= 3000 \land cID< 4000} Courses)$
 
-Join; project the students' names
-- $\pi_{Names}(S \bowtie Students)$
+Find tuples in Courses.cID that have all values of C.cID:
+
+$\rho(S, \pi_{sID}(Courses/C))$
+
+Join; project the students' names:
+
+$\pi_{Names}(S \bowtie Students)$
