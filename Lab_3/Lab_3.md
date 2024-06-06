@@ -21,7 +21,7 @@ T2
 | 45  | c   | 3   |
 | 20  | b   | 5   |
 
-"Provide the relations that result from the following queries. Your relations should be in the form of a table, and should include the schema."
+**"Provide the relations that result from the following queries. Your relations should be in the form of a table, and should include the schema."**
 
 ___
 
@@ -107,15 +107,25 @@ $\pi_{Name}((\sigma_{Result = 1-0}(Games) \bowtie_{Games.wpID = Players.pID} Pla
 
 $\rho(P18, (\sigma_{Year = 2018} Events) \bowtie Games))$
 
-$\pi_{Name}( P18 \bowtie_{wpID=P18.pID \lor bpID=P18.pID})$
+$\pi_{Name}( P18 \bowtie_{wpID=P18.pID \lor bpID=P18.pID} (Players))$
 
 **5. "Find the names and dates of any event in which Magnus Carlsen lost a game."**
-- Find Magnus Carlsen's pID (1)
-- Find any game where the Result is 1-0 and the bpID is 1 or where the Result is 0-1 and the wpID is 1
+
+$\rho(MC, (\pi_pID(\sigma_{Name=\text{Magnus Carlsen}}(Players))))$
+
+$\rho(MCLost, (\sigma_{(wpID=MC.pID \land Result=0-1) \lor (bpID=MC.pID \land Result=1-0)}(Games)))$
+
+$\pi_{Name, Year}(MCLost_{eID=eID} \bowtie Events)$
 
 **6. "Find the names of all opponents of Magnus Carlsen."**
-- Find Magnus Carlsen's pID (1)
-- Find all games where wpID or bpID is 1
+
+$\rho(MC, (\pi_pID(\sigma_{Name=\text{Magnus Carlsen}}(Players))))$
+
+$\rho(A, \sigma_{wpID != 1}(Games))$
+
+$\rho(B, \sigma_{bpID != 1}(Games))$
+
+$\pi_{Name}(A \cup B)$
 
 # Part 3: LMS Queries
 
@@ -179,7 +189,7 @@ $\rho(S2, Students)$
 
 $\pi_{S2.Name}(\sigma_{S1.Name=Ron \land S1.DOB=S2.DOB \land S2.Name != Ron}(S1 \times S2))$
 - Get every possible combination of student; select the rows where the birthdays match, but do not allow Ron to be matched with his "alias"; get the Name values of the resulting students
-- "Find students with matching birth years."
+- "Get the names of students with the same DOB as Ron, other than Ron."
 
 **Result:**
 
@@ -199,20 +209,18 @@ $\pi_{Name}(( \pi_{cID,sID}(Enrolled) / \pi_{sID}(Students) ) \bowtie Courses)$
 | cID |
 | :-- |
 
-___
-
-**3.4**
+# Part 4
 
 **"Provide a relational algebra query that uses the divide operator to find the names of all students who are taking all of the 3xxx-level classes."**
 
 Get the classes we are interested in:
 
-$\rho(C, \pi_{cID >= 3000 \land cID< 4000} Courses)$
+> $\rho(C, \pi_{cID >= 3000 \land cID< 4000} (Courses))$
 
 Find tuples in Courses.cID that have all values of C.cID:
 
-$\rho(S, \pi_{sID}(Courses/C))$
+> $\rho(S, \pi_{sID}(Enrolled/C))$
 
 Join; project the students' names:
 
-$\pi_{Names}(S \bowtie Students)$
+> $\pi_{Names}(S \bowtie Students)$
