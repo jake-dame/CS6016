@@ -193,7 +193,7 @@ $\pi_{S2.Name}(\sigma_{S1.Name=Ron \land S1.DOB=S2.DOB \land S2.Name != Ron}(S1 
 
 "Get the names of students with the same DOB as Ron, other than Ron."
 
-### Result:
+**Result:**
 
 | S2.Name  |
 | :------- |
