@@ -5,7 +5,7 @@ Jake Dame
 CS 6016: Database Systems & Applications  
 Dr. Nabil Makarem  
 
-# Part 1: Joins
+## Part 1: Joins
 
 T1
 | A   | Q   | R   |
@@ -25,7 +25,7 @@ T2
 
 ___
 
-**1. $T1 \bowtie_{T1.A=T2.A} T2$**
+### 1. $T1 \bowtie_{T1.A=T2.A} T2$
 
 | A   | Q   | R   | A   | B   | C   |
 | :-- | :-- | :-- | :-- | :-- | :-- |
@@ -34,7 +34,7 @@ ___
 
 ___
 
-**2. $T1 \bowtie_{T1.Q=T2.B} T2$**
+### 2. $T1 \bowtie_{T1.Q=T2.B} T2$
 
 | A   | Q   | B   | R   | C   |
 | :-- | :-- | :-- | :-- | :-- |
@@ -43,7 +43,7 @@ ___
 
 ___
 
-**3. $T1 \bowtie T2$**
+### 3. $T1 \bowtie T2$
 
 *Note: This is similar to the join in "1." by virtue of the fact that column A is the common column between both tables anyway; however, because it is a natural join, duplicate columns are not retained*
 
@@ -54,13 +54,13 @@ ___
 
 ___
 
-**4. $T1 \bowtie_{T1.A = T2.A \land T1.R = T2.C} T2$**
+### 4. $T1 \bowtie_{T1.A = T2.A \land T1.R = T2.C} T2$
 
 | A   | Q   | R   | A   | B   | C   |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | 20  | a   | 5   | 20  | b   | 5   |
 
-# Part 2: Chess Queries
+## Part 2: Chess Queries
 
 Events
 | Name               | Year | eID |
@@ -87,29 +87,28 @@ Games
 | 4   | 1   | 1/2-1/2 | 4    | 5    |
 | 5   | 3   | 0-1     | 3    | 1    |
 
-"Write relational algebra queries for the following. You can (and should) write your query on multiple lines if you use the renaming operator."
-
+**"Write relational algebra queries for the following. You can (and should) write your query on multiple lines if you use the renaming operator."**
 ___
 
-**1. "Find the names of any player with an Elo rating of 2850 or higher."**
+### 1. "Find the names of any player with an Elo rating of 2850 or higher."
 
 $\pi_{Name}(\sigma_{Elo >= 2850}(Players))$
 
-**2. "Find the names of any player who has ever played a game as white."**
+### 2. "Find the names of any player who has ever played a game as white."
 
 $\pi_{Name}(Games \bowtie_{Games.wpID = Players.pID} Players)$
 
-**3. "Find the names of any player who has ever won a game as white."**
+### 3. "Find the names of any player who has ever won a game as white."
 
 $\pi_{Name}((\sigma_{Result = 1-0}(Games) \bowtie_{Games.wpID = Players.pID} Players))$
 
-**4. "Find the names of any player who played any games in 2018."**
+### 4. "Find the names of any player who played any games in 2018."
 
-$\rho(P18, (\sigma_{Year = 2018} Events) \bowtie Games))$
+$\rho(Players2018, (\sigma_{Year = 2018} Events) \bowtie Games)$
 
-$\pi_{Name}( P18 \bowtie_{wpID=P18.pID \lor bpID=P18.pID} (Players))$
+$\pi_{Name}( Players2018 \bowtie_{wpID=Players2018.pID \lor bpID=Players2018.pID} (Players))$
 
-**5. "Find the names and dates of any event in which Magnus Carlsen lost a game."**
+### 5. "Find the names and dates of any event in which Magnus Carlsen lost a game."
 
 $\rho(MC, (\pi_pID(\sigma_{Name=\text{Magnus Carlsen}}(Players))))$
 
@@ -117,17 +116,15 @@ $\rho(MCLost, (\sigma_{(wpID=MC.pID \land Result=0-1) \lor (bpID=MC.pID \land Re
 
 $\pi_{Name, Year}(MCLost_{eID=eID} \bowtie Events)$
 
-**6. "Find the names of all opponents of Magnus Carlsen."**
+### 6. "Find the names of all opponents of Magnus Carlsen."
 
 $\rho(MC, (\pi_pID(\sigma_{Name=\text{Magnus Carlsen}}(Players))))$
 
-$\rho(A, \sigma_{wpID != 1}(Games))$
+$\rho(Ops, \sigma_{bpID != MC.pID}(Games) \cup \sigma_{wpID != MC.pID}(Games))$
 
-$\rho(B, \sigma_{bpID != 1}(Games))$
+$\pi_{Name}(Ops \bowtie_{wpID=Players.pID \lor bpID=Players.pID} Players)$
 
-$\pi_{Name}(A \cup B)$
-
-# Part 3: LMS Queries
+## Part 3: LMS Queries
 
 Students
 | sID | Name     | DOB  |
@@ -160,15 +157,17 @@ Courses
 
 ___
 
-**3.1**
+### 3.1
 
 $\rho(C, \pi_{sID}(\sigma_{Grd = C}(Enrolled)))$
 - Select students from  Enrolled whose Grade was C; project their sID; put those students into a new table named "C"
-- "Create a new table called "C" with the IDs of enrolled students who got a C."
 
 $\pi_{Name}((\pi_{sID}(Enrolled) - C) \bowtie Students)$
 - Get the sIDs of students in Enrolled; out of those, find the ones who are not in the "C" table; match the resulting students to the ones in Students; project the names of the resulting students
-- "Get the names of enrolled students who never got a C."
+
+**English description:**
+
+"Get the names of enrolled students who never got a C."
 
 **Result:**
 
@@ -179,7 +178,7 @@ $\pi_{Name}((\pi_{sID}(Enrolled) - C) \bowtie Students)$
 
 ___
 
-**3.2**
+### 3.2
 
 $\rho(S1, Students)$
 - Create a table named "S1" from the contents of "Students"
@@ -188,10 +187,13 @@ $\rho(S2, Students)$
 - Create a table named "S2" from the contents of "Students"
 
 $\pi_{S2.Name}(\sigma_{S1.Name=Ron \land S1.DOB=S2.DOB \land S2.Name != Ron}(S1 \times S2))$
-- Get every possible combination of student; select the rows where the birthdays match, but do not allow Ron to be matched with his "alias"; get the Name values of the resulting students
-- "Get the names of students with the same DOB as Ron, other than Ron."
+- Get every possible combination of student; select the rows where the birthdays match, but do not allow Ron to be matched with his other row; get the S2.Name values of the resulting rows
 
-**Result:**
+**English description:**
+
+"Get the names of students with the same DOB as Ron, other than Ron."
+
+### Result:
 
 | S2.Name  |
 | :------- |
@@ -199,28 +201,32 @@ $\pi_{S2.Name}(\sigma_{S1.Name=Ron \land S1.DOB=S2.DOB \land S2.Name != Ron}(S1 
 
 ___
 
-**3.3**
+### 3.3
 
 $\pi_{Name}(( \pi_{cID,sID}(Enrolled) / \pi_{sID}(Students) ) \bowtie Courses)$
 - Get the course and student IDs from Enrolled, and divide out by all students; match the resulting course ID values with the course IDs in Courses; project the names of the resulting courses
+
+**English description:**
+
+"Get all of the courses that have every  student enrolled in the course."
 
 **Result:**
 
 | cID |
 | :-- |
 
-# Part 4
+## Part 4
 
-**"Provide a relational algebra query that uses the divide operator to find the names of all students who are taking all of the 3xxx-level classes."**
+### "Provide a relational algebra query that uses the divide operator to find the names of all students who are taking all of the 3xxx-level classes."
 
-Get the classes we are interested in:
+**Get the classes we are interested in:**
 
-> $\rho(C, \pi_{cID >= 3000 \land cID< 4000} (Courses))$
+$\rho(C, \pi_{cID}(\sigma_{cID >= 3000 \land cID< 4000} (Courses)))$
 
-Find tuples in Courses.cID that have all values of C.cID:
+**Find tuples in Courses.cID that have all values of C.cID:**
 
-> $\rho(S, \pi_{sID}(Enrolled/C))$
+$\rho(S, \pi_{sID}(Enrolled/C))$
 
-Join; project the students' names:
+**Join; project the students' names:**
 
-> $\pi_{Names}(S \bowtie Students)$
+$\pi_{Name}(S \bowtie Students)$
